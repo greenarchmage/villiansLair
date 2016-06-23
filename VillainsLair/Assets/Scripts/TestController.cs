@@ -11,8 +11,13 @@ public class TestController : MonoBehaviour {
     private cubeType[,,] blueprint;
     // Use this for initialization
     void Start () {
+        // load prefab
         cube = Resources.Load("Prefabs/cube") as GameObject;
+        // world generation test
+        generateWorld();
+
         // Instantiate floor level
+        /*
         for (int i = 0; i < 100; i++)
         {
             for(int j = 0; j <100; j++)
@@ -22,8 +27,9 @@ public class TestController : MonoBehaviour {
                 worldLayout[i, 0, j] = cubeType.GRASS;
             }
         }
-
+        */
         // Instantiate test building
+        /*
         Vector3 baseVector = new Vector3(3, 1, 3);
         for (int i = 0; i < 2; i++)
         {
@@ -51,7 +57,7 @@ public class TestController : MonoBehaviour {
                 tempStruc.GetComponent<MeshRenderer>().material = Resources.Load("Materials/Wood") as Material;
             }
         }
-
+        */
         //BlueprintTest
         blueprint = new cubeType[3,3,3];
         for (int i = 0; i < 2; i++)
@@ -142,7 +148,6 @@ public class TestController : MonoBehaviour {
                 for (int k = 0; k < blueprint.GetLength(2); k++)
                 {
                     GameObject tempStruc = null;
-                    Debug.Log(worldLayout[i+ (int)baseVector.x, j+ (int)baseVector.y, k+(int)baseVector.z]);
                     switch (blueprint[i, j, k])
                     {
                         case cubeType.NONE:
@@ -168,5 +173,41 @@ public class TestController : MonoBehaviour {
                 }
             }
         }
+    }
+
+
+    private void generateWorld()
+    {
+        // Noise height
+        int[,] height = new int[200, 200];
+        for(int i = 0; i< height.GetLength(0); i++)
+        {
+            for(int j= 0; j < height.GetLength(1); j++)
+            {
+                height[i, j] = Random.Range(0, 4);
+            }
+        }
+        //Noise grass
+        int[,] grass = new int[200, 200];
+        for (int i = 0; i < grass.GetLength(0); i++)
+        {
+            for (int j = 0; j < grass.GetLength(1); j++)
+            {
+                grass[i, j] = Random.Range(0, 4);
+            }
+        }
+
+        //Instantiate
+        //test with grass
+        for (int i = 0; i < 200; i++)
+        {
+            for (int j = 0; j < 200; j++)
+            {
+                GameObject baseCube = Instantiate(cube, new Vector3(i, height[i,j], j), Quaternion.identity) as GameObject;
+                baseCube.GetComponent<MeshRenderer>().material = Resources.Load("Materials/Grass") as Material;
+                worldLayout[i, 0, j] = cubeType.GRASS;
+            }
+        }
+
     }
 }

@@ -7,7 +7,8 @@ namespace Assets.Scripts.Utility
     {
         NONE,
         WOOD,
-        GRASS
+        GRASS,
+        ROCK
     }
     public class Enums
     {
